@@ -1,6 +1,7 @@
 const express = require('express');
 const bodyParser = require('body-parser');
-// const mongodb = require('./db/connect');
+const MongoClient = require('mongodb').MongoClient;
+const mongodb = require('./db/connect');
 const professionalRoutes = require('./routes/professional');
 
 
@@ -19,18 +20,18 @@ app
   .use('/professional', professionalRoutes);
 
 // Inicializar conexión y arrancar servidor
-// mongodb.initDb((err, db) => {
-//   if (err) {
-//     console.error(' Error connecting to DB:', err);
-//   } else {
-//     app.listen(port, () => {
-//       console.log(` Connected to DB and listening on port ${port}`);
-//     });
-//   }
-// });
-
-app.use('/', require('./routes/professional'));
-
-app.listen(port, () => {
-  console.log(`✅ Server running locally at http://localhost:${port}`);
+mongodb.initDb((err,mongodb) => {
+  if (err) {
+    console.error(' Error connecting to DB:', err);
+  } else {
+    app.listen(port, () => {
+      console.log(` Connected to DB and listening on port ${port}`);
+    });
+  }
 });
+
+// app.use('/', require('./routes/professional'));
+
+// app.listen(port, () => {
+//   console.log(` Server running locally at http://localhost:${port}`);
+// });
